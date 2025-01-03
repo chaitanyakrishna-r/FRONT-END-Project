@@ -2,7 +2,7 @@ export const SelectTravelesList =[
     {
         id:1,
         title:'Solo',
-        desc:'A sole traveles in exploration',
+        desc:'A sole Traveller in exploration',
         icon:'🛩️',
         people:'1'
     },
@@ -50,4 +50,4 @@ export const SelectBudgetOption=[
     },
 ]
 
-export const AI_PROMT='Generate Travel plan for Location :{location}'
+export const AI_PROMT='Generate Travel plan for Location :{location} for {totalDays} Days for {traveller} with a {budget} budget, giveme Hotels options list with HotelName. Hotel adddress, Price, hotel image url, geo cooridnates, rating, descriptions and suggest itinerary with placeName, place Details, Place Image Url, Geo Corrdinates, ticket Pricing, Time t travel each fo the location for 3 days with each plan with bets time to visit in JSON format.'

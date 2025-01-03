@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SelectBudgetOption, SelectTravelesList } from "@/constants/Option";
+import { AI_PROMT, SelectBudgetOption, SelectTravelesList } from "@/constants/Option";
+import { chatSession } from "@/service/AIModal";
 import React, { useEffect, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { toast } from "sonner";
 
 function CreateTrip() {
 
   const [place, setPlace] = useState();
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState({});
 
   const handleInputChange =(name,value)=>{
     
@@ -16,15 +18,37 @@ function CreateTrip() {
             [name]:value
         })
   }
-  useEffect(()=>{
-    console.log('this is from useEffect',formData);
-  },[formData])
+  // useEffect(()=>{
+  //   console.log('this is from useEffect',formData);
+  // },[formData])
 
-  const OnGenerateTrip=()=>{
-    if( formData?.NoOfDays > 10){
-        console.log("Please Enter Day with in 10 days")
+
+  // const FINAL_PROMOT = AI_PROMT
+  // .replace('{location}',formData?.location?.label)
+  // .replace('{totalDays}',formData?.NoOfDays)
+  // .replace('{budget}',formData?.Budget)
+  // .replace('{traveller}',formData?.Traveller)
+
+  // console.log(FINAL_PROMOT)
+ 
+  const OnGenerateTrip=async ()=>{
+    if( formData?.NoOfDays > 10 || !formData?.location || !formData?.Budget || !formData?.Traveller){
+       toast("Please fill all details")
         return;
     }
+   
+
+    const FINAL_PROMOT = AI_PROMT
+    .replace('{location}',formData?.location?.label)
+    .replace('{totalDays}',formData?.NoOfDays)
+    .replace('{budget}',formData?.Budget)
+    .replace('{traveller}',formData?.Traveller)
+  
+    console.log(FINAL_PROMOT);
+
+    const result = await chatSession.sendMessage(FINAL_PROMOT);
+    console.log("text from gemini",result.response.text());
+   
   }
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10">
@@ -54,7 +78,9 @@ function CreateTrip() {
           <h2 className="text-xl my-3 font-medium">
             How many days are you planning your trip{" "}
           </h2>
-          <Input placeholder={"Ex.3"} type="number" onChange={(e)=>{handleInputChange('NoOfDays',e.target.value)}} />
+          <Input placeholder={"Ex.3"} type="number" 
+          
+          onChange={(e)=>{handleInputChange('NoOfDays',e.target.value)}} />
         </div>
 
         <div>
