@@ -12,7 +12,7 @@ const PlaceCardVisit = ({placeInfo}) => {
             <div>
                 <h2 className='font-bold text-lg'>{placeInfo.placeName}</h2>
                 <p className='text-sm text-gray-400'>{placeInfo.placeDetails}</p>
-                <h2 className=' text-red-500 mt-3'>🕛 {placeInfo?.timeToTravel}</h2>
+                <h2 className=' text-red-500 mt-3'>🕛 {placeInfo?.timeToTravel} Minutes</h2>
             
             </div>
         </div>
