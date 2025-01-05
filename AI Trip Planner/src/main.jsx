@@ -8,6 +8,7 @@ import CreateTrip from './create-trip'
 import { Toaster } from 'sonner'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import ViewTrip from './view-trip/[tripId]'
+import Footer from './view-trip/components/Footer'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')).render(
     <Header/>
     <Toaster/>
     <RouterProvider router={router}></RouterProvider>
+  
     </GoogleOAuthProvider>
   </StrictMode>,
 )
