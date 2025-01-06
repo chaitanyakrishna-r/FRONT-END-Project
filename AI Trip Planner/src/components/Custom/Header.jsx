@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { FaGoogle } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 import axios from "axios";
 import {
   Dialog,
@@ -15,40 +16,45 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 function Header() {
   const user = JSON.parse(localStorage.getItem("user"));
-   const [openDialogeBox, setOpenDialogeBox] = useState(false);
-
+  const [openDialogeBox, setOpenDialogeBox] = useState(false);
 
   // useEffect(() => {
   //   console.log("From header", user);
   // });
-  
-  const login = useGoogleLogin({
-    onSuccess:(codeResp)=>getUserProfile(codeResp),
-   
-    onError:(error)=>console.log(error)
-  })
 
-  const getUserProfile = (tokenInfo)=>{
-    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo.access_token}`,{
-      headers:{
-        Authorization:`Bearer ${tokenInfo?.access_token}`,
-        Accept:'Application/json'
-      }
-    }).then((resp)=>{
-      console.log(resp);
-      localStorage.setItem('user',JSON.stringify(resp.data));
-      setOpenDialogeBox(false);
-      window.location.reload();
-    })
-   
-  }
+  const login = useGoogleLogin({
+    onSuccess: (codeResp) => getUserProfile(codeResp),
+
+    onError: (error) => console.log(error),
+  });
+
+  const getUserProfile = (tokenInfo) => {
+    axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo.access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenInfo?.access_token}`,
+            Accept: "Application/json",
+          },
+        }
+      )
+      .then((resp) => {
+        console.log(resp);
+        localStorage.setItem("user", JSON.stringify(resp.data));
+        setOpenDialogeBox(false);
+        window.location.reload();
+      });
+  };
   return (
     <div className="flex justify-between p-3 px-5 items-center">
-      <img src="/logo.svg" alt="company-logo" />
+      <a href="/">
+        <img src="/logo.svg" alt="company-logo" />
+      </a>
       <div>
         {user ? (
           <div className="flex items-center gap-3">
@@ -57,6 +63,14 @@ function Header() {
                 My Trip
               </Button>
             </a>
+            {location.pathname !== "/create-trip" && (
+              <a href="/create-trip">
+              <Button variant="outline" className="rounded-full">
+                <FaPlus></FaPlus> Create Trip
+              </Button>
+            </a>
+            )}
+           
             <Popover>
               <PopoverTrigger>
                 <img
@@ -80,14 +94,17 @@ function Header() {
             </Popover>
           </div>
         ) : (
-          <Button onClick={()=>{
-            setOpenDialogeBox(true);
-          }}>Sign in </Button>
+          <Button
+            onClick={() => {
+              setOpenDialogeBox(true);
+            }}
+          >
+            Sign in{" "}
+          </Button>
         )}
         <Dialog open={openDialogeBox}>
           <DialogContent>
             <DialogHeader>
-            
               <DialogDescription>
                 <img src="/logo.svg" />
                 <h2 className="font-bold text-lg mt-7">Sign In With Google</h2>
