@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './main.css'
 import { assets } from '../../assets/assets'
 import { IoCompassOutline } from "react-icons/io5";
@@ -8,11 +8,15 @@ import { FaCode } from "react-icons/fa";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { FaMicrophone } from "react-icons/fa";
 import { IoIosSend } from "react-icons/io";
+import { Context } from '../../context/Context';
 
 
 
 
 const Main = () => {
+
+    const {onSent,recentPrompt,showResult, resultData, setInput, input,loading} = useContext(Context);
+
   return (
     <div className='main'>
         <div className="nav">
@@ -20,7 +24,29 @@ const Main = () => {
             <img src={assets.geminiLogo} alt="" />
         </div>
         <div className="main-container">
-            <div className="greet">
+            {showResult
+            ?<div className='result'>
+                <div className="result-title">
+                    <div className="user-icon"> </div>
+                    <p>{recentPrompt}</p>
+                </div>
+                <div className="result-data">
+                    <img src={assets.geminiLogo} alt="" />
+                    {loading
+                    ?<div className='loader'>
+                        <hr />
+                        <hr />
+                        <hr />
+                    </div>
+                    : <p dangerouslySetInnerHTML={{__html:resultData}}></p>
+                    }
+                   
+                    
+                </div>
+               
+            </div>
+            :<>
+              <div className="greet">
                 <p><span>Hello, Chaitanya.</span></p>
                 <p>How can I Help You Today.</p>
             </div>
@@ -43,13 +69,17 @@ const Main = () => {
                 </div>
             </div>
 
+            </>}
+          
             <div className="main-bottom">
                 <div className="search-box">
-                    <input type="text" placeholder='Enter a Promt For Gemini' />
+                    <input onChange={(e)=>{setInput(e.target.value)}} 
+                    value={input}
+                    type="text" placeholder='Enter a Promt For Gemini' />
                     <div>
                         <MdOutlineAddPhotoAlternate/>
                         <FaMicrophone/>
-                        <IoIosSend/>
+                        <IoIosSend onClick={()=>{onSent()}}/>
                     </div>
                 </div>
                 <p className='bottom-info'>
